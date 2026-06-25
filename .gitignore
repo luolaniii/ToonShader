@@ -37,6 +37,7 @@ ue-mcp.yml
 shadertoolsconfig.json
 Plugins/
 *.md
+!README.md
 
 # Local deliverables and review artifacts. Keep only source snapshots under
 # Deliverables/ModifiedCodeFiles_20260616_0028.
