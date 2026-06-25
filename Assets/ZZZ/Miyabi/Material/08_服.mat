@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2485177227194934307
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 9
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: "08_\u670D"
+  m_Shader: {fileID: 4800000, guid: b9567c75653d98c4397bc38d40f1aa96, type: 3}
+  m_Parent: {fileID: 2100000, guid: ee2d6404459b0884ab47fb3d79962cb5, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _DOMAIN_BODY
+  - _MATCAP_ON
+  - _OUTLINE_PASS
+  - _SCREEN_SPACE_RIM
+  - _SCREEN_SPACE_SHADOW
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _LightTex:
+        m_Texture: {fileID: 2800000, guid: a64b0e62cbc69c1449a81847891cd0f0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: c3e8c7c1a923b6d489e36d2ba3e5bd23, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MatCapTex2:
+        m_Texture: {fileID: 2800000, guid: 7ee0653afccacbf489eaacfb45e122d2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MatCapTex5:
+        m_Texture: {fileID: 2800000, guid: 4280c50fea0494149a258f247a5344f7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OtherDataTex:
+        m_Texture: {fileID: 2800000, guid: 8c1eb52e0ee6db94297f813d063115cc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OtherDataTex2:
+        m_Texture: {fileID: 2800000, guid: 8b5e0c504ffd4a7459aa9de36c1d3fe8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Domain: 3
+    - _MatCap: 1
+    - _MatCapAlphaBurst: 0.25
+    - _MatCapAlphaBurst2: 0.43
+    - _MatCapAlphaBurst5: 0.31
+    - _MatCapBlendMode: 2
+    - _MatCapBlendMode2: 2
+    - _MatCapBlendMode5: 1
+    - _MatCapColorBurst: 0.41
+    - _MatCapColorBurst2: 0.54
+    - _MatCapColorBurst5: 0.29
+    - _Outline: 1
+    - _OutlineWidth: 1
+    - _ScreenSpaceRim: 1
+    - _ScreenSpaceRimWidth: 10
+    - _SkinMatId: 5
+    m_Colors:
+    - _HeadCenter: {r: -0.00000073202347, g: 1.4234335, b: -0.015841365, a: 0}
+    - _HeadForward: {r: -0.00000064533697, g: 1.4186202, b: 0.033926487, a: 0}
+    - _HeadRight: {r: 0.049999263, g: 1.4234335, b: -0.015841365, a: 0}
+    - _MatCapColorTint2: {r: 0.85882354, g: 0.89411765, b: 0.972549, a: 1}
+    - _MatCapColorTint5: {r: 0.8509804, g: 0.9019608, b: 0.9254902, a: 1}
+    - _OutlineColor: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 1}
+    - _OutlineColor2: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 1}
+    - _OutlineColor3: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 1}
+    - _OutlineColor4: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 1}
+    - _OutlineColor5: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 1}
+    - _ShadowColor: {r: 0.5254902, g: 0.52156866, b: 0.67058825, a: 1}
+    - _ShadowColor2: {r: 0.7294118, g: 0.7647059, b: 0.8784314, a: 1}
+    - _ShadowColor3: {r: 0.8, g: 0.64705884, b: 0.5254902, a: 1}
+    - _ShadowColor5: {r: 0.3882353, g: 0.4392157, b: 0.50980395, a: 1}
+    - _ShallowColor: {r: 0.7254902, g: 0.7490196, b: 0.81960785, a: 1}
+    - _ShallowColor2: {r: 0.8745098, g: 0.9098039, b: 0.92941177, a: 1}
+    - _ShallowColor3: {r: 0.9019608, g: 0.80784315, b: 0.7490196, a: 1}
+    - _ShallowColor4: {r: 0.6117647, g: 0.5803922, b: 0.7372549, a: 1}
+    - _ShallowColor5: {r: 0.5764706, g: 0.627451, b: 0.69803923, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
