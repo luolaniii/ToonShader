@@ -1,0 +1,73 @@
+# Unreal Engine generated files
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# IDE and generated project files
+.vs/
+.vscode/
+.idea/
+.vsconfig
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+*.ipch
+
+# Build outputs and debug symbols
+bin/
+obj/
+*.dll
+*.exe
+*.exp
+*.ilk
+*.lib
+*.pdb
+
+# Local tool/runtime state
+__pycache__/
+*.py
+*.pyc
+.mcp.json
+ue-mcp.yml
+shadertoolsconfig.json
+Plugins/
+*.md
+
+# Local deliverables and review artifacts. Keep only source snapshots under
+# Deliverables/ModifiedCodeFiles_20260616_0028.
+Deliverables/**
+!Deliverables/
+!Deliverables/ModifiedCodeFiles_20260616_0028/
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.cpp
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.h
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.hpp
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.inl
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.cs
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.ush
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.usf
+!Deliverables/ModifiedCodeFiles_20260616_0028/**/*.hlsl
+
+# Obsolete diagnostics, archives, and reference-material experiments.
+Content/NewMap.umap
+Content/NewMap_HLOD0_Instancing.uasset
+Content/__ExternalActors__/
+Content/__ExternalObjects__/
+Content/TestToon/Archive/
+Content/Toon/
+Content/ZZZ/Miyabi/Outline/
+Content/ZZZ/Miyabi/Test/
+Content/ZZZ/Miyabi/Toon/
+Content/TestToon/Miyabi/M_TestToon_Character.uasset
+Content/TestToon/Miyabi/M_TestToon_EyeLayer.uasset
+Content/TestToon/Miyabi/M_TestToon_Face.uasset
+Content/TestToon/Miyabi/M_TestToon_Face_Final_Rebuild.uasset
+
+# OS metadata
+Thumbs.db
+Desktop.ini

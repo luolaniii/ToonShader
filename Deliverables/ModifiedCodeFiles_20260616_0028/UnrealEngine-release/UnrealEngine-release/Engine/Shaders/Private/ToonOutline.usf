@@ -1,0 +1,111 @@
+// Toon outline pass: renders inverted-hull back faces of MSM_Toon materials after opaque lighting.
+// The vertex shader pushes vertices outward along the skinned world normal by a screen-space
+// constant pixel width; the pixel shader evaluates the same material's BaseColor (honoring masked
+// clipping) and combines it with the Toon shadow-region color. This keeps the exam-required
+// mesh pass while adapting the reference's material-ID-aware outline-color idea.
+
+#if !MATERIAL_LWC_ENABLED
+#define UE_DF_FORCE_FP32_OPS 1
+#endif
+
+#include "Common.ush"
+#include "/Engine/Generated/Material.ush"
+#include "/Engine/Generated/VertexFactory.ush"
+
+struct FToonOutlineVSToPS
+{
+	INVARIANT_OUTPUT float4 Position : SV_POSITION;
+	FVertexFactoryInterpolantsVSToPS FactoryInterpolants;
+	float4 PixelPosition : TEXCOORD6;
+};
+
+#if VERTEXSHADER
+
+void MainVS(
+	FVertexFactoryInput Input,
+	out FToonOutlineVSToPS Output
+#if USE_GLOBAL_CLIP_PLANE
+	, out float OutGlobalClipPlaneDistance : SV_ClipDistance
+#endif
+	, out FStereoVSOutput StereoOutput
+	)
+{
+	StereoSetupVF(Input, StereoOutput);
+
+	FVertexFactoryIntermediates VFIntermediates = GetVertexFactoryIntermediates(Input);
+	float4 WorldPos = VertexFactoryGetWorldPosition(Input, VFIntermediates);
+
+	half3x3 TangentToLocal = VertexFactoryGetTangentToLocal(Input, VFIntermediates);
+	FMaterialVertexParameters VertexParameters = GetMaterialVertexParameters(Input, VFIntermediates, WorldPos.xyz, TangentToLocal);
+
+	// Keep world position offset so outlines follow WPO animation (cloth sway etc).
+	WorldPos.xyz += GetMaterialWorldPositionOffset(VertexParameters);
+	ApplyMaterialFirstPersonTransform(VertexParameters, WorldPos.xyz);
+
+	// Post-skinning world normal: TangentToWorld[2] is correct for GPUSkin and Local vertex factories alike.
+	float3 WorldNormal = normalize(float3(VertexParameters.TangentToWorld[2]));
+
+	float4 ClipPos = INVARIANT(mul(float4(WorldPos.xyz, 1.0f), ResolvedView.TranslatedWorldToClip));
+
+	// Screen-space constant width: project the normal to view space, push along its XY in NDC.
+	// Multiplying by ClipPos.w cancels the perspective divide so the width stays fixed in pixels.
+	float3 ViewNormal = mul(WorldNormal, (float3x3)ResolvedView.TranslatedWorldToView);
+	float2 Dir = ViewNormal.xy;
+	float DirLen = max(length(Dir), 1e-4f); // Degenerate (normal facing the camera) verts are interior and depth-rejected anyway; just avoid NaN.
+	Dir /= DirLen;
+
+	// CustomPrimitiveData[0].x scales the width per component (0 means "unset" -> 1; negative disables).
+	float WidthScale = GetPrimitiveData(VertexParameters).CustomPrimitiveData[0].x;
+	WidthScale = (WidthScale == 0.0f) ? 1.0f : max(WidthScale, 0.0f);
+	float WidthPixels = ToonOutlinePass.OutlineWidth * WidthScale;
+
+	ClipPos.xy += Dir * (WidthPixels * 2.0f * ResolvedView.ViewSizeAndInvSize.zw) * ClipPos.w;
+
+	// Reference-compatible z offset: only bias the shell depth, not its screen-space position.
+	// UE uses reversed device Z, so increasing ClipPos.z pulls the outline depth toward the camera.
+	// This suppresses small inner-face artifacts such as mouth-corner outlines without changing the
+	// exam-required Mesh Pass topology. CustomPrimitiveData[1].x can tune or disable it per component.
+	float DepthBiasScale = GetPrimitiveData(VertexParameters).CustomPrimitiveData[1].x;
+	DepthBiasScale = (DepthBiasScale == 0.0f) ? 1.0f : max(DepthBiasScale, 0.0f);
+	const float OutlineDepthBias = 0.0001f * min(DepthBiasScale, 4.0f);
+	ClipPos.z = min(ClipPos.z + OutlineDepthBias * ClipPos.w, ClipPos.w);
+
+	Output.Position = ClipPos;
+
+#if USE_GLOBAL_CLIP_PLANE
+	OutGlobalClipPlaneDistance = dot(ResolvedView.GlobalClippingPlane, float4(WorldPos.xyz, 1));
+#endif
+
+	Output.FactoryInterpolants = VertexFactoryGetInterpolantsVSToPS(Input, VFIntermediates, VertexParameters);
+	Output.PixelPosition = WorldPos;
+}
+
+#endif // VERTEXSHADER
+
+#if PIXELSHADER
+
+void MainPS(
+	in INPUT_POSITION_QUALIFIERS float4 SvPosition : SV_Position,
+	FVertexFactoryInterpolantsVSToPS FactoryInterpolants,
+	float4 PixelPosition : TEXCOORD6,
+	in FStereoPSInput StereoInput
+	OPTIONAL_IsFrontFace,
+	out float4 OutColor : SV_Target0
+	)
+{
+	StereoSetupPS(StereoInput);
+
+	FMaterialPixelParameters MaterialParameters = GetMaterialPixelParameters(FactoryInterpolants, SvPosition);
+	FPixelMaterialInputs PixelMaterialInputs;
+	CalcMaterialParameters(MaterialParameters, PixelMaterialInputs, SvPosition, bIsFrontFace);
+
+	// Honor masked materials so outline silhouettes match cut-out geometry (hair cards etc).
+	GetMaterialCoverageAndClipping(MaterialParameters, PixelMaterialInputs);
+
+	half3 BaseColor = GetMaterialBaseColor(PixelMaterialInputs);
+	half3 ShadowRegionColor = saturate(GetMaterialSubsurfaceData(PixelMaterialInputs).rgb);
+	half3 RegionTint = lerp(half3(1.0f, 1.0f, 1.0f), ShadowRegionColor, 0.65f);
+	OutColor = float4(BaseColor * RegionTint * ToonOutlinePass.OutlineColorMul, 1.0f);
+}
+
+#endif // PIXELSHADER
